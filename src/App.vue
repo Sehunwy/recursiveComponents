@@ -1,13 +1,36 @@
 <template>
   <div id="app">
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
 <script>
+/* eslint-disable */
+import iconfont from "@/assets/js/iconfont.js";
+import { allModule } from "@/lib/config.js";
+import Router from "vue-router";
 export default {
-  name: 'App'
-}
+  name: "App",
+  data() {
+    return {
+      modules: [],
+      route: []
+    };
+  },
+  created() {
+    allModule.then(result => {
+      this.modules = result;
+    });
+  },
+  watch: {
+    modules: function(newVal, oldVal) {
+      for (var i = 0; i < newVal.length; i++) {
+        this.$router.options.routes.push(newVal[i].getMenu());
+      }
+      this.$router.addRoutes(this.$router.options.routes);
+    }
+  }
+};
 </script>
 
 <style>
